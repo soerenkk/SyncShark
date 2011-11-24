@@ -215,12 +215,12 @@ function checkDatabases($print = true) {
 			}
 			
 			// indexes
-			$rows = $dev_db->execute("SHOW INDEXES FROM ".$t);
+			$rows = $dev_db->execute("SHOW INDEXES FROM `".$t."`");
 			$dev_columns = array();
 			foreach($rows as $row) {
 				$dev_columns["Index name: " . $row["Key_name"] ." Column: ". $row["Column_name"]] = $row;
 			}
-			$rows = $prod_db->execute("SHOW INDEXES FROM ".$t);
+			$rows = $prod_db->execute("SHOW INDEXES FROM `".$t."`");
 			$prod_columns = array();
 			foreach($rows as $row) {
 				$prod_columns["Index name: " . $row["Key_name"] ." Column: ". $row["Column_name"]] = $row;
@@ -280,12 +280,12 @@ function checkDatabases($print = true) {
 			}
 			
 			//indexes
-			$rows = $dev_db->execute("SHOW INDEXES FROM ".$t);
+			$rows = $dev_db->execute("SHOW INDEXES FROM `".$t."`");
 			$dev_columns = array();
 			foreach($rows as $row) {
 				$dev_columns[] = "Index name: " . $row["Key_name"] ." Column: ". $row["Column_name"];
 			}
-			$rows = $prod_db->execute("SHOW INDEXES FROM ".$t);
+			$rows = $prod_db->execute("SHOW INDEXES FROM `".$t."`");
 			$prod_columns = array();
 			foreach($rows as $row) {
 				$prod_columns[] = "Index name: " . $row["Key_name"] ." Column: ". $row["Column_name"];
