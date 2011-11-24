@@ -16,6 +16,9 @@ Thumbs.db
 
 # Specific files #
 ##################
+.htaccess
+.htpasswd
+settings.json
 
 # Specific folders #
 ####################
