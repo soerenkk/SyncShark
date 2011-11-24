@@ -187,12 +187,12 @@ function checkDatabases($print = true) {
 	$warnings = 0;
 	foreach ($prod_tables as $t) {
 		if (in_array($t, $dev_tables)) {
-			$rows = $dev_db->execute("SHOW COLUMNS FROM ".$t);
+			$rows = $dev_db->execute("SHOW COLUMNS FROM `".$t."`");
 			$dev_columns = array();
 			foreach($rows as $row) {
 				$dev_columns[$row[0]] = $row;
 			}
-			$rows = $prod_db->execute("SHOW COLUMNS FROM ".$t);
+			$rows = $prod_db->execute("SHOW COLUMNS FROM `".$t."`");
 			$prod_columns = array();
 			foreach($rows as $row) {
 				$prod_columns[$row[0]] = $row;
@@ -250,12 +250,12 @@ function checkDatabases($print = true) {
 
 	foreach ($dev_tables as $t) {
 		if (in_array($t, $prod_tables)) {
-			$rows = $dev_db->execute("SHOW COLUMNS FROM ".$t);
+			$rows = $dev_db->execute("SHOW COLUMNS FROM `".$t."`");
 			$dev_columns = array();
 			foreach($rows as $row) {
 				$dev_columns[$row[0]] = $row;
 			}
-			$rows = $prod_db->execute("SHOW COLUMNS FROM ".$t);
+			$rows = $prod_db->execute("SHOW COLUMNS FROM `".$t."`");
 			$prod_columns = array();
 			foreach($rows as $row) {
 				$prod_columns[$row[0]] = $row;
