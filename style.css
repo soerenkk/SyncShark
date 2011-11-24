@@ -1,0 +1,120 @@
+/* CSS Structural Reset */
+html, body, div, form, fieldset, legend, label { margin: 0; padding: 0;}
+table { border-collapse: collapse; border-spacing: 0;}
+th, td{ text-align: left; vertical-align: top;}
+h1, h2, h3, h4, h5, h6, th, td, caption { font-weight:normal; }
+img { border: 0; }
+
+body {font-family: arial,sans-serif; font-size: 13px; color:#292929}
+
+.closebutton {position:absolute; width:16px; height:16px; top:-8px; right:0px; background: transparent url(images/close.png) no-repeat scroll left center; cursor:pointer;}
+
+td.headline {text-align:right; font-weight:bold;padding-top:20px;}
+td.label {text-align:right; vertical-align: top;}
+td input[type="text"] {width: 250px;}
+.error {color:#f00;border: 1px solid #000; padding: 5px;}
+.infobox {padding:8px;margin:8px; border: 1px solid #D3D3D3;}
+.linenumber {font-weight:bold;}
+.green {color:#0099A7;}
+.red {color:#D3D3D3;}
+.grey {color:#888;}
+.small {font-size: 11px;}
+.varname {font-family:monospace;}
+a {color: #0099A7;}
+
+.warning, .success {padding-left: 64px; height:48px; line-height:48px;font-size:16px;margin:4px;}
+.warning {background: transparent url(images/warning.png) no-repeat scroll left center;}
+.success {background: transparent url(images/success.png) no-repeat scroll left center;}
+
+.file-line {
+	border-bottom: 1px solid #D3D3D3;
+}
+.file-line .varname {
+	padding: 2px 30px;
+	display:inline-block;
+	height: 24px;
+	line-height: 24px;
+	cursor:help;
+}
+.file-line .buttons {
+	display:inline-block;
+	width:386px;
+	height: 22px;
+	float:right;
+	padding: 3px;
+}
+.new-dir {background: transparent url(images/new_folder.png) no-repeat scroll left center;}
+.new-file {background: transparent url(images/new_file.png) no-repeat scroll left center;}
+.updated-file {background: transparent url(images/updated_file.png) no-repeat scroll left center;}
+.uptodate-file {background: transparent url(images/uptodate-file.png) no-repeat scroll left center;}
+
+.new-column {background: transparent url(images/insert-table-column.png) no-repeat scroll left center;}
+.new-table {background: transparent url(images/insert-table.png) no-repeat scroll left center;}
+.index {background: transparent url(images/index.png) no-repeat scroll left center;}
+.warning-small {background: transparent url(images/warning-small.png) no-repeat scroll left center;}
+
+#head {position:relative; height:80px;}
+#menu {position:absolute; top: 30px; left: 200px;}
+#menu a {color: #747474; margin-right: 16px;}
+#menu a.selected {color: #0099A7;font-weight:bold;}
+
+#content {padding:20px 40px;}
+
+.button {
+display:inline-block;
+-moz-border-radius:3px 3px 3px 3px;
+-moz-user-select:none;
+background:-moz-linear-gradient(center top , #F9F9F9, #E3E3E3) repeat scroll 0 0 transparent;
+border-color:#CCCCCC #BBBBBB #A0A0A0;
+border-left:1px solid #BBBBBB;
+border-right:1px solid #BBBBBB;
+border-style:solid;
+border-width:1px;
+color:#000000;
+cursor:default;
+font:12px arial,sans-serif;
+margin:0 8px 0 0;
+outline:medium none;
+padding:3px 8px;
+text-align:center;
+vertical-align:middle;
+white-space:nowrap;
+width: 70px;
+}
+.button:hover {
+border-color: #444444 !important
+}
+.button:active {
+background:-moz-linear-gradient(center top , #EEEEEE, #F9F9F9) repeat scroll 0 0 transparent;
+border-color:#444444 !important;
+}
+input.button {
+width: 78px;
+}
+
+table.table {
+	border-width: 1px;
+	border-spacing: 2px;
+	border-style: outset;
+	border-color: #aaa;
+	border-collapse: collapse;
+	background-color: white;
+}
+table.table th {
+	border-width: 1px;
+	padding: 3px;
+	border-style: inset;
+	border-color: #aaa;
+	background-color: white;
+	-moz-border-radius: 0px 0px 0px 0px;
+}
+table.table td {
+	border-width: 1px;
+	padding: 3px;
+	border-style: inset;
+	border-color: #aaa;
+	background-color: white;
+	-moz-border-radius: 0px 0px 0px 0px;
+}
+
+
