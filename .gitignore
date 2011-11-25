@@ -23,6 +23,7 @@ settings.json
 # Specific folders #
 ####################
 dev/*
+history/*
 
 # We keep our .gitignore folders incase we ignore full content of a folder
 !.gitignore
