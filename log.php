@@ -19,7 +19,7 @@ require "header.php";
 	</thead>
 <?
 $log_file = 'history/SyncShark.log';
-if (!file_exists($log_file)) {
+if (file_exists($log_file)) {
 	$log = file_get_contents($log_file);
 	$lines = explode("\n", $log);
 	
