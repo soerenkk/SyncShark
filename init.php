@@ -6,12 +6,12 @@ $settings = new Settings();
 
 // set defaults
 $sync_dir = dirname($_SERVER["SCRIPT_FILENAME"]) . "/";
-$settings->setDefault("production_dir", dirname($sync_dir) . "/");
-$settings->setDefault("devel_dir", $sync_dir . "dev/");
+$settings->setDefault("production_dir", dirname(dirname($sync_dir)) . "/");
+$settings->setDefault("devel_dir", dirname($sync_dir) . "/");
 
 exec("which rsync", $rsync_path);
 $settings->setDefault("rsync", $rsync_path[0]);
-$settings->setDefault("ignore_list", ".svn");
+$settings->setDefault("ignore_list", ".svn\n/SyncShark");
 
 function utf8htmlentities($string) {
         return htmlentities($string, ENT_QUOTES, "UTF-8");
@@ -22,7 +22,7 @@ function getHistoryFiles($r) {
 }
 
 function secsToDateAndTime($secs) {
-	    return date("d-m-Y H:i:s", $secs);
+	    return date("Y-m-d H:i:s", $secs);
 }
 
 function endsWith($haystack, $needle)
@@ -90,6 +90,12 @@ function checkFiles() {
 	
 	$result = filterLines($result, $RSYNC_SPAM);
 	$uptodate_text = " is uptodate";
+	$html .= '<table class="content">';
+	$html .= '<thead><tr>';
+	$html .= 	'<th width="100%">Path</th>';
+	$html .= 	'<th>Modified</th>';
+	$html .= 	'<th>Actions</th>';
+	$html .= '</tr></thead>';
 	foreach ($result as $r) {		
 		if (strpos($r, $uptodate_text) !== false) {
 			$r = substr($r, 0, strlen($r) - strlen($uptodate_text));
@@ -120,8 +126,10 @@ function checkFiles() {
 				$type = "new-file";
 			}
 		}
-		$html .= '<div class="file-line '.$file_line_class.'">';
-		$html .= '<div class="varname '.$type.'">'.$r . '</div><div class="buttons">';
+		$html .= '<tr class="file-line '.$file_line_class.'">';
+		$html .= '<td class="varname '.$type.'">'.$r . '</td>';
+		$html .= '<td class="modified">'. secsToDateAndTime(filemtime($dev_file)) . '</td>';
+		$html .= '<td class="buttons">';
 		if ($type == "new-dir") {
 			if ($parent_exists) {
 				$html .= '<div class="button" onclick="create_dir(\''.$prod_file.'\', \''.$r.'\')">Opret</div>';
@@ -130,13 +138,13 @@ function checkFiles() {
 		if ($type == "new-file") {
 			$html .= '<div class="button showcontent" onclick="showContent(this, \'get_content\', \''.$r.'\');">Show content</div>';
 			if ($parent_exists) {
-				$html .= '<div class="button" onclick="copy_file(\''.$dev_file.'\', \''.$prod_file.'\',  \''.$r.'\')">Create</div>';
+				$html .= '<div class="button" onclick="copy_file(\''.$dev_file.'\', \''.$prod_file.'\',  \''.$r.'\', \'create\')">Create</div>';
 			}
 		}
 		if ($type == "updated-file") {
 			$html .= '<div class="showcontent button" onclick="showContent(this, \'get_diff\', \''.$r.'\');">Show diff</div>';
-			$html .= '<div class="button" onclick="copy_file(\''.$dev_file.'\', \''.$prod_file.'\',  \''.$r.'\')">Update</div>';
-			$html .= '<div class="button" onclick="copy_file(\''.$prod_file.'\', \''.$dev_file.'\')">Revert</div>';
+			$html .= '<div class="button" onclick="copy_file(\''.$dev_file.'\', \''.$prod_file.'\',  \''.$r.'\', \'update\')">Update</div>';
+			$html .= '<div class="button" onclick="copy_file(\''.$prod_file.'\', \''.$dev_file.'\',  \''.$r.'\', \'revert\')">Revert</div>';
 			if (count(getHistoryFiles($r)) > 0) {
 				$html .= '<div class="showhistory button" onclick="showContent(this, \'get_history\', \''.$r.'\');">History</div>';			
 			}
@@ -147,10 +155,13 @@ function checkFiles() {
 				$html .= '<div class="showhistory button" onclick="showContent(this, \'get_history\', \''.$r.'\');">History</div>';			
 			}
 		}
-		$html .= '</div><div class="info"></div></div>'."\n";
+		$html .= '</td>';
+		$html .= '</tr>'."\n";
 	}
+	$html .= "</table>";
+
 	if ($differences > 0) {
-		$status = '<a href="files.php"><div class="warning">'.$differences. ' differences detected in files.</div></a>';
+		$status = '<div class="warning">'.$differences. ' differences detected in files.</div>';
 	} else {
 		$status = '<div class="success">Files are synchronized.</div>';
 	}
@@ -304,7 +315,7 @@ function checkDatabases($print = true) {
 		}
 	}
 	if ($warnings > 0) {
-		$status = '<a href="databases.php"><div class="warning">'.$warnings . ' differences detected in databases.</div></a>';
+		$status = '<div class="warning">'.$warnings . ' differences detected in databases.</div>';
 	} else {
 		$status = '<div class="success">Databases are synchronized.</div>';
 	}

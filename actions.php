@@ -1,8 +1,20 @@
 <?php
 	require "init.php";
 	
+	function appendToActionLog($action, $path, $data = array()) {
+		$file = "history/SyncShark.log";
+		$data['action'] = $action;
+		$data['path'] = $path;
+		$data['created'] = time();
+		$data['username'] = $_COOKIE['username'];
+		$message = json_encode($data);
+		$message .= "\n";
+		file_put_contents($file, $message, FILE_APPEND | LOCK_EX);
+	}
+	
 	switch ($_POST["action"]) {
 		case "copy":
+			$data = array();
 			if (file_exists($_POST["dest"]) && is_file($_POST["dest"])) {
 				$history_dir = dirname($_POST["path"]);
 				if ($history_dir == ".") {
@@ -19,15 +31,18 @@
 				$HistoryFile = $history_dir . basename($_POST["path"]) . ".sharkhistory_" . time();
 				copy($_POST["dest"], $HistoryFile);
 				touch($HistoryFile, $OrgTime);
+				$data['history'] = $HistoryFile;
 			}
 
 			$OrgTime = filemtime($_POST["src"]);
 			copy($_POST["src"], $_POST["dest"]);
 			touch($_POST["dest"], $OrgTime);
+			appendToActionLog($_POST['log_type'], $_POST["path"], $data);
 			echo '{"success": "true"}';
 			break;
 		case "create_dir":
 			mkdir($_POST["dir"]);
+			appendToActionLog('create_dir', $_POST["path"]);
 			echo '{"success": "true"}';
 			break;
 		case "get_content":
@@ -70,17 +85,24 @@
 			$files = getHistoryFiles($path);
 			$files = array_reverse($files);
 			$last_file = $settings->get("production_dir") . $path;
+			echo '<table class="content">';
+			echo '<thead><tr>';
+			echo 	'<th width="100%">Timestamp</th>';
+			echo 	'<th>Actions</th>';
+			echo '</tr></thead>';
+
 			foreach ($files as $f) {
 				$parts = explode(".sharkhistory_", $f);
 				$revision = (int)$parts[1];
-				echo '<div class="file-line"><div class="varname uptodate-file">' . secsToDateAndTime($revision) .'</div><div class="buttons">';
+				echo '<tr class="file-line"><td class="varname uptodate-file">' . secsToDateAndTime($revision) .'</td><td class="buttons">';
 				echo '<div class="button showcontent" onclick="showContent(this, \'get_history_content\', \''.$path.'\', {\'revision\': '.$revision.'});">Show content</div>';
 				if (!isImage($parts[0])) {
 					echo '<div class="button showcontent" onclick="showContent(this, \'get_diff\', \''.$f.'\', {\'other\': \''.$last_file.'\'});">Show diff</div>';
 				}
-				echo '</div><div class="info"></div></div>';
+				echo '</td></tr>';
 				$last_file = $f;
 			}
+			echo '</table>';
 			echo '</div>';
 			break;
 		case "get_diff":

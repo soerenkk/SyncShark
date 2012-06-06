@@ -13,7 +13,7 @@ td.headline {text-align:right; font-weight:bold;padding-top:20px;}
 td.label {text-align:right; vertical-align: top;}
 td input[type="text"] {width: 250px;}
 .error {color:#f00;border: 1px solid #000; padding: 5px;}
-.infobox {padding:8px;margin:8px; border: 1px solid #D3D3D3;}
+.infobox {padding:8px;margin:8px; background-color: white;}
 .linenumber {font-weight:bold;}
 .green {color:#0099A7;}
 .red {color:#D3D3D3;}
@@ -26,23 +26,21 @@ a {color: #0099A7;}
 .warning {background: transparent url(images/warning.png) no-repeat scroll left center;}
 .success {background: transparent url(images/success.png) no-repeat scroll left center;}
 
-.file-line {
-	border-bottom: 1px solid #D3D3D3;
-}
+.file-line {}
+.file-line.even {background-color: #eee;}
+tr.new-content {background-color: #ccc;}
 .file-line .varname {
-	padding: 2px 30px;
-	display:inline-block;
+	padding: 2px 0px 2px 30px;
 	height: 24px;
 	line-height: 24px;
 	cursor:help;
 }
 .file-line .buttons {
-	display:inline-block;
-	width:386px;
 	height: 22px;
-	float:right;
 	padding: 3px;
+	white-space: nowrap;
 }
+.modified {white-space: nowrap; padding-right: 20px; line-height: 24px;}
 .new-dir {background: transparent url(images/new_folder.png) no-repeat scroll left center;}
 .new-file {background: transparent url(images/new_file.png) no-repeat scroll left center;}
 .updated-file {background: transparent url(images/updated_file.png) no-repeat scroll left center;}
@@ -91,7 +89,10 @@ border-color:#444444 !important;
 input.button {
 width: 78px;
 }
-
+table.content {
+	width: 100%;
+	line-height: 24px;
+}
 table.table {
 	border-width: 1px;
 	border-spacing: 2px;
@@ -117,4 +118,7 @@ table.table td {
 	-moz-border-radius: 0px 0px 0px 0px;
 }
 
+th {font-size: 12px; color: #555; font-weight: bold; text-transform: uppercase; padding: 5px 0;}
+#loggedin {position: absolute; top:10px; right:10px;}
+#loggedin a {font-size: 11px; text-decoration: none;}
 
