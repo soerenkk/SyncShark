@@ -2,7 +2,12 @@
 	require "init.php";
 	
 	function appendToActionLog($action, $path, $data = array()) {
-		$file = "history/SyncShark.log";
+		$history_dir = "history/";
+		if (!file_exists($history_dir)) {
+			mkdir($history_dir, 0777, true);
+		}
+
+		$file = $history_dir."SyncShark.log";
 		$data['action'] = $action;
 		$data['path'] = $path;
 		$data['created'] = time();
