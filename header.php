@@ -43,6 +43,7 @@ function setSelected($file) {
 	
 			<div id="menu">
 				<a href="index.php"<?php setSelected("index.php"); ?>>Status</a>
+				<a href="recent.php"<?php setSelected("recent.php"); ?>>Recent files</a>
 				<a href="log.php"<?php setSelected("log.php"); ?>>Log</a>
 				<a href="settings.php"<?php setSelected("settings.php"); ?>>Settings</a>
 				<a href="info.php"<?php setSelected("info.php"); ?>>PHPinfo</a>
