@@ -11,7 +11,6 @@ $settings->setDefault("devel_dir", dirname($sync_dir) . "/");
 
 exec("which rsync", $rsync_path);
 $settings->setDefault("rsync", $rsync_path[0]);
-$settings->setDefault("recent_ext", 'php,css,js,html');
 $settings->setDefault("ignore_list", ".svn\n/SyncShark");
 
 function utf8htmlentities($string) {

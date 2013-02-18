@@ -19,19 +19,31 @@ require "header.php";
 <?
 
 	$cmd = 'find '.$settings->get("devel_dir").' -regex \'.*\.\('.implode('\|', explode(',',$settings->get("recent_ext"))).'\)\' -type f -printf \'%T@ %p\n\' | sort -n | tail -50';
+
+	$cmd = 'rsync -r --list-only --exclude "/SyncShark" . | sed -r "s/^.{23}//" | sort -n';
+	
+	$excude_string = "";
+	foreach (explode("\n", $settings->get("ignore_list")) as $e) {
+		$e = trim($e);
+		if ($e != "") {
+			$excude_string .= '--exclude "'.$e.'" ';
+		}
+	}
+	
+	$cmd = $settings->get("rsync") . ' '.$excude_string.'-r --list-only '.$settings->get("devel_dir").' | sed -r "s/^.{23}//" | sort -n';
+
 	exec($cmd, $result);
 	$result = array_reverse($result);
 	foreach ($result as $r) {
 		$parts = explode(' ', $r);
-		$time_parts = explode('.', $parts[0]);
-		$time = $time_parts[0];
-		$path = substr($r, strlen($parts[0]) + 1);
-		if (strpos($path, 'SyncShark') !== false) {
+		$time = $parts[0] . ' ' . $parts[1];
+		$path = $parts[2];
+		if (is_dir($settings->get("devel_dir") . $path)) {
 			continue;
 		}
 ?>
 	<tr>
-		<td><?=secsToDateAndTime($time)?></td>
+		<td width="200"><?=$time?></td>
 		<td class="varname"><?=$path?></td>
 	</tr>
 <?		

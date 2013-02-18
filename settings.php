@@ -103,10 +103,6 @@ echo $whoami[0];
 			<td><input type="text" name="rsync" value="<?php echo $settings->get("rsync"); ?>" /></td>
 		</tr>
 		<tr>
-			<td class="label">Recent file extensions:</td>
-			<td><input type="text" name="recent_ext" value="<?php echo $settings->get("recent_ext"); ?>" /></td>
-		</tr>
-		<tr>
 			<td class="label">Ignore list:</td>
 			<td>
 				<textarea rows="8" cols="50" name="ignore_list"><?php echo $settings->get("ignore_list"); ?></textarea>
