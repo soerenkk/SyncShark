@@ -53,7 +53,7 @@ require "header.php";
 <form action="settings.php" method="post">
 	<table>
 		<tr>
-			<td class="headline">Protection</td>
+			<td class="headline">Production</td>
 		</tr>
 		<tr>
 			<td class="label">Sync login:</td>
@@ -147,7 +147,7 @@ echo $whoami[0];
 <h1>Actions</h1>
 <script>
 	var updateDevFiles = function(button) {
-		if (confirm('Copying all files from protection to development.')) {
+		if (confirm('Copying all files from production to development.')) {
 			$(button).replaceWith(' Working... Please wait')
 			jQuery.post(window.location.pathname, {'action': 'updateDevFiles'}, function(result) {
 				if (result.error) {
@@ -159,7 +159,7 @@ echo $whoami[0];
 		}
 	}
 	var updateDevDb = function(button) {
-		if (confirm('Copying all data and structure from protection to development.')) {
+		if (confirm('Copying all data and structure from production to development.')) {
 			$(button).replaceWith(' Working... Please wait')
 			jQuery.post(window.location.pathname, {'action': 'updateDevDb'}, function(result) {
 				if (result.error) {
@@ -171,5 +171,5 @@ echo $whoami[0];
 		}
 	}
 </script>
-<p>Copy all files from protection directory to development directory <input type="button" onclick="updateDevFiles(this)" value="Update development files"/></p>
-<p>Copy all data and structure from protection database to development database<input type="button" onclick="updateDevDb(this)" value="Update development database"/></p>
+<p>Copy all files from production directory to development directory <input type="button" onclick="updateDevFiles(this)" value="Update development files"/></p>
+<p>Copy all data and structure from production database to development database<input type="button" onclick="updateDevDb(this)" value="Update development database"/></p>
