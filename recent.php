@@ -18,9 +18,8 @@ require "header.php";
 
 <?
 
-	$cmd = 'find '.$settings->get("devel_dir").' -regex \'.*\.\('.implode('\|', explode(',',$settings->get("recent_ext"))).'\)\' -type f -printf \'%T@ %p\n\' | sort -n | tail -50';
-
-	$cmd = 'rsync -r --list-only --exclude "/SyncShark" . | sed -r "s/^.{23}//" | sort -n';
+	//$cmd = 'find '.$settings->get("devel_dir").' -regex \'.*\.\('.implode('\|', explode(',',$settings->get("recent_ext"))).'\)\' -type f -printf \'%T@ %p\n\' | sort -n | tail -50';
+	//$cmd = 'rsync -r --list-only --exclude "/SyncShark" . | sed -r "s/^.{23}//" | sort -n';
 	
 	$excude_string = "";
 	foreach (explode("\n", $settings->get("ignore_list")) as $e) {

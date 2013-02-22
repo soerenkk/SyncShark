@@ -53,6 +53,6 @@ function setSelected($file) {
 		<div style="height: 2px; background-color: #D3D3D3;"></div>
 		<div id="content">
 <?php
-require "init.php";
+require_once "init.php";
 ?>
 

@@ -1,29 +1,52 @@
 <?php
-require "header.php";
+require_once "init.php";		
 
 if (!empty($_POST)) {
-	$_POST["svn_enabled"] = isset($_POST["svn_enabled"]);
-	foreach ($_POST as $key => $value) {
-		$settings->set($key, $value);
+	if (isset($_POST['action'])) {
+		if ($_POST['action'] == 'updateDevFiles') {
+			$excude_string = '';
+			if (strpos($settings->get("devel_dir"), $settings->get("production_dir")) === 0) { // dev in production dir
+				$rel_path = substr($settings->get("devel_dir"), strlen($settings->get("production_dir")));
+				if (substr($rel_path, 0, 1) != '/') {
+					$rel_path = '/' . $rel_path;
+				}
+				$excude_string = '--exclude "'.$rel_path.'" ';
+			}
+			$cmd = $settings->get("rsync") . ' '.$excude_string.'-r '.$settings->get("production_dir").' ' . $settings->get("devel_dir");
+			exec($cmd, $result);
+			echo '{}';		
+		}
+		if ($_POST['action'] == 'updateDevDb') {
+			$cmd = 'mysqldump -u '.$settings->get('production_db_user').' --password='.$settings->get('production_db_pass').' '.$settings->get('production_db_name').' | mysql -u '.$settings->get('devel_db_user').' --password='.$settings->get('devel_db_pass').' -h '.$settings->get('devel_db_host').' '.$settings->get('devel_db_name');
+			exec($cmd, $result);
+			echo '{}';		
+		}
+		exit;		
+	} else {
+		$_POST["svn_enabled"] = isset($_POST["svn_enabled"]);
+		foreach ($_POST as $key => $value) {
+			$settings->set($key, $value);
+		}
+		
+		if(is_file($sync_dir.".htaccess"))
+		{
+			unlink($sync_dir.".htaccess");
+		}
+		
+		if(is_file($sync_dir.".htpasswd"))
+		{
+			unlink($sync_dir.".htpasswd");
+		}
+		
+		if ($_POST["sync_login"] != "" || $_POST["sync_password"] != "") {
+			file_put_contents($sync_dir . ".htaccess", "#\n# THIS FILE IS GENERATED - DO NOT EDIT\n#\nAuthType Basic\nAuthName \"SyncShark\"\nAuthUserFile ".$sync_dir . ".htpasswd\nRequire valid-user");
+			exec('htpasswd -b -c -m '.$sync_dir.'.htpasswd "'.$_POST["sync_login"].'" "'.$_POST["sync_password"].'"', $cmd_result);
+		}
+		echo "<script>window.location = 'index.php';</script>";
 	}
-	
-	if(is_file($sync_dir.".htaccess"))
-	{
-		unlink($sync_dir.".htaccess");
-	}
-	
-	if(is_file($sync_dir.".htpasswd"))
-	{
-		unlink($sync_dir.".htpasswd");
-	}
-	
-	if ($_POST["sync_login"] != "" || $_POST["sync_password"] != "") {
-		file_put_contents($sync_dir . ".htaccess", "#\n# THIS FILE IS GENERATED - DO NOT EDIT\n#\nAuthType Basic\nAuthName \"SyncShark\"\nAuthUserFile ".$sync_dir . ".htpasswd\nRequire valid-user");
-		exec('htpasswd -b -c -m '.$sync_dir.'.htpasswd "'.$_POST["sync_login"].'" "'.$_POST["sync_password"].'"', $cmd_result);
-	}
-	echo "<script>window.location = 'index.php';</script>";
 }
 
+require "header.php";
 ?>
 <h1>Settings</h1>
 
@@ -120,3 +143,33 @@ echo $whoami[0];
 		</tr>
 	</table>
 </form>
+
+<h1>Actions</h1>
+<script>
+	var updateDevFiles = function(button) {
+		if (confirm('Copying all files from protection to development.')) {
+			$(button).replaceWith(' Working... Please wait')
+			jQuery.post(window.location.pathname, {'action': 'updateDevFiles'}, function(result) {
+				if (result.error) {
+					alert('Error: ' + result.error);
+				} else {
+					window.location.reload(true);
+				}
+			}, "json");
+		}
+	}
+	var updateDevDb = function(button) {
+		if (confirm('Copying all data and structure from protection to development.')) {
+			$(button).replaceWith(' Working... Please wait')
+			jQuery.post(window.location.pathname, {'action': 'updateDevDb'}, function(result) {
+				if (result.error) {
+					alert('Error: ' + result.error);
+				} else {
+					window.location.reload(true);
+				}
+			}, "json");
+		}
+	}
+</script>
+<p>Copy all files from protection directory to development directory <input type="button" onclick="updateDevFiles(this)" value="Update development files"/></p>
+<p>Copy all data and structure from protection database to development database<input type="button" onclick="updateDevDb(this)" value="Update development database"/></p>
