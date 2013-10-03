@@ -39,7 +39,7 @@ if (!empty($_POST)) {
 		}
 		
 		if ($_POST["sync_login"] != "" || $_POST["sync_password"] != "") {
-			file_put_contents($sync_dir . ".htaccess", "#\n# THIS FILE IS GENERATED - DO NOT EDIT\n#\nAuthType Basic\nAuthName \"SyncShark\"\nAuthUserFile ".$sync_dir . ".htpasswd\nRequire valid-user");
+			//file_put_contents($sync_dir . ".htaccess", "#\n# THIS FILE IS GENERATED - DO NOT EDIT\n#\nAuthType Basic\nAuthName \"SyncShark\"\nAuthUserFile ".$sync_dir . ".htpasswd\nRequire valid-user");
 			exec('htpasswd -b -c -m '.$sync_dir.'.htpasswd "'.$_POST["sync_login"].'" "'.$_POST["sync_password"].'"', $cmd_result);
 		}
 		echo "<script>window.location = 'index.php';</script>";
@@ -63,6 +63,17 @@ require "header.php";
 			<td class="label">Sync password:</td>
 			<td><input type="text" name="sync_password" value="<?php echo $settings->get("sync_password"); ?>" /></td>
 		</tr>
+		<? if ($settings->get("sync_login") != '' && $settings->get("sync_password") != '') { ?>
+		<tr>
+			<td class="label">Enable password:</td>
+			<td>
+<textarea readonly="readonly" cols="50" rows="4">AuthType Basic
+AuthName "SyncShark"
+AuthUserFile <?=$sync_dir?>.htpasswd
+Require valid-user</textarea>
+			</td>
+		</tr>		
+		<? } ?>
 		<tr>
 			<td class="headline">Production server</td>
 		</tr>
